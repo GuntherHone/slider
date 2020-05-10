@@ -1,0 +1,21 @@
+.expander-enter {
+  transform: none;
+}
+
+.expander-enter-active {
+  transform: rotate(90deg);
+  transition: transform 100ms;
+}
+
+.expander-enter-done {
+  transform: rotate(90deg);
+}
+
+.expander-exit {
+  transform: rotate(90deg);
+}
+
+.expander-exit-active {
+  transform: none;
+  transition: transform 100ms;
+}
