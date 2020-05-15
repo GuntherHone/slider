@@ -4,15 +4,10 @@ import { CSSTransition } from "react-transition-group";
 
 import "./SongItem.css";
 
-const getItemStyle = (isDragging, draggableStyle, isSelected) => ({
+const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: "none",
   marginBottom: "8px",
-  padding: "5px 10px",
-  backgroundColor: isDragging
-    ? "rgb(0,120,210)"
-    : isSelected
-    ? "#444"
-    : "transparent",
+  backgroundColor: isDragging ? "rgb(0,120,210)" : "transparent",
   boxShadow: isDragging ? "3px 3px 5px rgba(0,0,0,0.5)" : "none",
   fontSize: "0.82em",
   fontWeight: "bold",
@@ -32,7 +27,7 @@ const Icon = () => (
   </svg>
 );
 
-export default ({ song, index, provided, snapshot }) => {
+export default ({ song, index, provided, snapshot, selected }) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -48,16 +43,25 @@ export default ({ song, index, provided, snapshot }) => {
           {...provided.dragHandleProps}
           style={getItemStyle(
             snapshot.isDragging,
-            provided.draggableProps.style,
-            false
+            provided.draggableProps.style
           )}
         >
-          <span onClick={() => setExpanded(!expanded)}>
+          <div
+            onClick={() => setExpanded(!expanded)}
+            style={{
+              background: snapshot.isDragging
+                ? "transparent"
+                : selected
+                ? "#444"
+                : "transparent",
+              padding: "5px 5px",
+            }}
+          >
             <CSSTransition in={expanded} timeout={2000} classNames="expander">
               <Icon />
             </CSSTransition>
             {song.Title}
-          </span>
+          </div>
           {expanded &&
             song.VerseOrder.map((verse, index) => (
               <p style={{ padding: "0px 20px" }} key={index}>

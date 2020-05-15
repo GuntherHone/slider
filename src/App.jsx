@@ -26,6 +26,8 @@ const Main = styled.div`
 
 function App() {
   const [songs, setSongs] = useState([]);
+  const [selectedSongIndex, setSelectedSongIndex] = useState(0);
+  const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
 
   const openFiles = async (event) => {
     const newSongs = await Promise.all(
@@ -43,12 +45,30 @@ function App() {
     const [removed] = result.splice(sourceIndex, 1);
     result.splice(destinationIndex, 0, removed);
     setSongs(result);
+    if (sourceIndex === selectedSongIndex) {
+      setSelectedSongIndex(destinationIndex);
+    } else if (
+      sourceIndex < selectedSongIndex &&
+      destinationIndex >= selectedSongIndex
+    ) {
+      setSelectedSongIndex(selectedSongIndex - 1);
+    } else if (
+      sourceIndex > selectedSongIndex &&
+      destinationIndex <= selectedSongIndex
+    ) {
+      setSelectedSongIndex(selectedSongIndex + 1);
+    }
   };
 
   return (
     <Layout>
       <Header addSng={openFiles} />
-      <SideBar songs={songs} reorderSongs={reorderSongs} />
+      <SideBar
+        songs={songs}
+        reorderSongs={reorderSongs}
+        selectedSong={selectedSongIndex}
+        selectedSlide={selectedSlideIndex}
+      />
       <Main>Main</Main>
       <Footer songs={songs} />
     </Layout>

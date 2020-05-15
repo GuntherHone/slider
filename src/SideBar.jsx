@@ -33,6 +33,7 @@ export default ({ songs, reorderSongs, selectedSong, selectedSlide }) => {
                   song={song}
                   index={index}
                   key={song.Title + index}
+                  selected={selectedSong === index}
                 ></SongItem>
               ))}
               {provided.placeholder}
