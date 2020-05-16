@@ -19,7 +19,7 @@ const Layout = styled.div`
 const AddIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    height="2em"
+    height="1.75em"
     viewBox="0 0 24 24"
     fill="#999"
     className="svgicon"
@@ -40,7 +40,7 @@ const ExportIcon = () => (
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 512 512"
     fill="#999"
-    height="2em"
+    height="1.75em"
     className="svgicon"
   >
     <title>Export to presentation...</title>
@@ -54,6 +54,8 @@ export default ({ addSng }) => (
     <FileInputButton accept=".sng" onChange={addSng}>
       <AddIcon />
     </FileInputButton>
-    <ExportIcon />
+    <div style={{ cursor: "pointer" }}>
+      <ExportIcon />
+    </div>
   </Layout>
 );
