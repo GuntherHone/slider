@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import KeyboardEventHandler from "react-keyboard-event-handler";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import SongItem from "./SongItem";
@@ -47,6 +48,21 @@ export default ({
             </div>
           )}
         </Droppable>
+        <KeyboardEventHandler
+          handleKeys={["down", "up"]}
+          onKeyEvent={(key, e) => {
+            switch (key) {
+              case "down":
+                doSelect({ songIndex: selectedSong + 1, slideIndex: 0 });
+                break;
+              case "up":
+                doSelect({ songIndex: selectedSong - 1, slideIndex: 0 });
+                break;
+              default:
+                break;
+            }
+          }}
+        />
       </DragDropContext>
     </Layout>
   );

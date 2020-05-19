@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { CSSTransition } from "react-transition-group";
+import KeyboardEventHandler from "react-keyboard-event-handler";
 
 import "./SongItem.css";
 
@@ -75,6 +76,26 @@ export default ({ song, index, provided, snapshot, selected, doSelect }) => {
                 {verse}
               </p>
             ))}
+          <KeyboardEventHandler
+            handleKeys={["left", "right", "space"]}
+            onKeyEvent={(key, e) => {
+              if (selected) {
+                switch (key) {
+                  case "right":
+                    setExpanded(true);
+                    break;
+                  case "left":
+                    setExpanded(false);
+                    break;
+                  case "space":
+                    setExpanded(!expanded);
+                    break;
+                  default:
+                    break;
+                }
+              }
+            }}
+          />
         </div>
       )}
     </Draggable>

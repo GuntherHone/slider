@@ -38,6 +38,8 @@ function App() {
     );
 
     setSongs([...songs, ...newSongs]);
+    // Remove focus from input element
+    document.activeElement.blur();
   };
 
   const reorderSongs = (sourceIndex, destinationIndex) => {
@@ -61,7 +63,9 @@ function App() {
   };
 
   const doSelect = ({ songIndex, slideIndex }) => {
-    setSelectedSongIndex(songIndex);
+    songIndex >= 0 &&
+      songIndex < songs.length &&
+      setSelectedSongIndex(songIndex);
     setSelectedSlideIndex(slideIndex);
   };
 
