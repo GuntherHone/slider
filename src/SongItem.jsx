@@ -14,8 +14,13 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 });
 
-const Icon = () => (
-  <svg viewBox="0 0 40 40" height="1em" style={{ cursor: "pointer" }}>
+const Icon = ({ onClick }) => (
+  <svg
+    viewBox="0 0 40 40"
+    height="1em"
+    style={{ cursor: "pointer" }}
+    onClick={onClick}
+  >
     <polyline
       points="10 5 25 20 10 35"
       fill="none"
@@ -27,13 +32,13 @@ const Icon = () => (
   </svg>
 );
 
-export default ({ song, index, provided, snapshot, selected }) => {
+export default ({ song, index, provided, snapshot, selected, doSelect }) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
     <Draggable
-      key={song.CCLI + index}
-      draggableId={song.CCLI + index}
+      key={song.CCLI || "undefined" + index}
+      draggableId={song.CCLI || "undefined" + index}
       index={index}
     >
       {(provided, snapshot) => (
@@ -47,7 +52,9 @@ export default ({ song, index, provided, snapshot, selected }) => {
           )}
         >
           <div
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => {
+              !selected && doSelect({ songIndex: index, slideIndex: 0 });
+            }}
             style={{
               background: snapshot.isDragging
                 ? "transparent"
@@ -58,7 +65,7 @@ export default ({ song, index, provided, snapshot, selected }) => {
             }}
           >
             <CSSTransition in={expanded} timeout={2000} classNames="expander">
-              <Icon />
+              <Icon onClick={() => setExpanded(!expanded)} />
             </CSSTransition>
             {song.Title}
           </div>

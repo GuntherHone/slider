@@ -12,7 +12,13 @@ const Layout = styled.div`
   height: 100%;
 `;
 
-export default ({ songs, reorderSongs, selectedSong, selectedSlide }) => {
+export default ({
+  songs,
+  reorderSongs,
+  selectedSong,
+  selectedSlide,
+  doSelect,
+}) => {
   const dragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -34,6 +40,7 @@ export default ({ songs, reorderSongs, selectedSong, selectedSlide }) => {
                   index={index}
                   key={song.Title + index}
                   selected={selectedSong === index}
+                  doSelect={doSelect}
                 ></SongItem>
               ))}
               {provided.placeholder}

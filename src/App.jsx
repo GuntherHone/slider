@@ -60,6 +60,11 @@ function App() {
     }
   };
 
+  const doSelect = ({ songIndex, slideIndex }) => {
+    setSelectedSongIndex(songIndex);
+    setSelectedSlideIndex(slideIndex);
+  };
+
   return (
     <Layout>
       <Header addSng={openFiles} />
@@ -68,6 +73,7 @@ function App() {
         reorderSongs={reorderSongs}
         selectedSong={selectedSongIndex}
         selectedSlide={selectedSlideIndex}
+        doSelect={doSelect}
       />
       <Main>Main</Main>
       <Footer songs={songs} />
