@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import parseSng from "./parseSng";
 
+import Main from "./Main";
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Footer from "./Footer";
@@ -13,15 +14,6 @@ const Layout = styled.div`
   grid-template-areas: "header sidebar main" "footer footer footer";
   width: 100vw;
   height: 100vh;
-`;
-
-const Main = styled.div`
-  grid-area: main;
-  background: #111;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2em;
 `;
 
 function App() {
@@ -79,7 +71,7 @@ function App() {
         selectedSlide={selectedSlideIndex}
         doSelect={doSelect}
       />
-      <Main>Main</Main>
+      <Main song={songs[selectedSongIndex]} />
       <Footer songs={songs} />
     </Layout>
   );
