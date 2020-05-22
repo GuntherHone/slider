@@ -18,13 +18,14 @@ const Button = styled.label`
 
 export default ({ accept, children, onChange }) => (
   <>
-    <Button htmlFor="input">{children}</Button>
-    <NoDisplayInput
-      type="file"
-      accept={accept}
-      id="input"
-      onChange={onChange}
-      multiple
-    />
+    <Button>
+      <NoDisplayInput
+        type="file"
+        accept={accept}
+        onChange={onChange}
+        multiple
+      />
+      {children}
+    </Button>
   </>
 );
