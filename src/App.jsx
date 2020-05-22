@@ -47,6 +47,7 @@ function App() {
   };
 
   const openZip = async (event) => {
+    if (!event.target.files.length) return;
     event.persist();
     const zip = await JSZip.loadAsync(event.target.files[0]);
     const scheduleFile = await zip.file("Schedule.col").async("text");
