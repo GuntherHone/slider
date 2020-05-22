@@ -5,7 +5,7 @@ const Layout = styled.div`
   grid-area: header;
   display: flex;
   justify-content: center;
-  background: #333;
+  background: #444;
   padding: 5px;
   color: #ccc;
   font-size: 0.8rem;

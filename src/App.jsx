@@ -33,6 +33,10 @@ function App() {
     setScheduleName("untitled");
   }
 
+  function setFocus() {
+    document.activeElement.blur();
+  }
+
   const openFiles = async (event) => {
     const newSongs = await Promise.all(
       [...event.target.files].map(async (file) => {
@@ -42,8 +46,8 @@ function App() {
     );
 
     setSongs([...songs, ...newSongs]);
-    // Remove focus from input element
-    document.activeElement.blur();
+
+    setFocus();
   };
 
   const openZip = async (event) => {
@@ -71,6 +75,8 @@ function App() {
     );
 
     setSongs(newSongs.map(parseSng));
+
+    setFocus();
   };
 
   const reorderSongs = (sourceIndex, destinationIndex) => {
