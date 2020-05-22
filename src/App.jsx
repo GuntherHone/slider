@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import JSZip from "jszip";
+
 import parseSng from "./parseSng";
+import parseCol from "./parseCol";
 
 import Main from "./Main";
 import Header from "./Header";
+import ControlPanel from "./ControlPanel";
 import SideBar from "./SideBar";
 import Footer from "./Footer";
 
 const Layout = styled.div`
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto 1fr auto;
   grid-template-columns: auto auto 1fr;
-  grid-template-areas: "header sidebar main" "footer footer footer";
+  grid-template-areas: "header header header" "controlpanel sidebar main" "footer footer footer";
   width: 100vw;
   height: 100vh;
 `;
@@ -20,6 +24,14 @@ function App() {
   const [songs, setSongs] = useState([]);
   const [selectedSongIndex, setSelectedSongIndex] = useState(0);
   const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
+  const [scheduleName, setScheduleName] = useState("untitled");
+
+  function resetState() {
+    setSongs([]);
+    setSelectedSongIndex(0);
+    setSelectedSlideIndex(0);
+    setScheduleName("untitled");
+  }
 
   const openFiles = async (event) => {
     const newSongs = await Promise.all(
@@ -32,6 +44,32 @@ function App() {
     setSongs([...songs, ...newSongs]);
     // Remove focus from input element
     document.activeElement.blur();
+  };
+
+  const openZip = async (event) => {
+    event.persist();
+    const zip = await JSZip.loadAsync(event.target.files[0]);
+    const scheduleFile = await zip.file("Schedule.col").async("text");
+
+    resetState();
+
+    setScheduleName(
+      event.target.files[0].name.split(".").slice(0, -1).join(".")
+    );
+
+    const { items } = parseCol(scheduleFile);
+
+    let newSongs = await Promise.all(
+      items.reduce((acc, { FileName }) => {
+        if (FileName) {
+          acc.push(zip.file(`Songs/${FileName}`).async("text"));
+        }
+
+        return acc;
+      }, [])
+    );
+
+    setSongs(newSongs.map(parseSng));
   };
 
   const reorderSongs = (sourceIndex, destinationIndex) => {
@@ -63,7 +101,8 @@ function App() {
 
   return (
     <Layout>
-      <Header addSng={openFiles} />
+      <Header title={scheduleName} />
+      <ControlPanel addSng={openFiles} addZip={openZip} />
       <SideBar
         songs={songs}
         reorderSongs={reorderSongs}
