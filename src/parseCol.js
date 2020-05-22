@@ -65,7 +65,7 @@ export default function parseCol(input) {
     });
 
     if (currentNode !== root) {
-      throw "Unexpected end of file!";
+      throw new Error("Unexpected end of file!");
     }
 
     return currentNode.children[0];
@@ -73,29 +73,35 @@ export default function parseCol(input) {
 
   function genJSON(node, indent = "") {
     if (node.type === "object") {
-      return eval(
-        `(${indent}{\n` +
-          node.children
-            .map((child) => genJSON(child, indent + "  "))
-            .join("\n") +
-          `\n${indent}})`
+      return (
+        `${indent}{\n` +
+        node.children
+          .map((child) => genJSON(child, indent + "  "))
+          .join(",\n") +
+        `\n${indent}}`
       );
     } else if (node.type === "array") {
       return (
-        `${indent}${node.name}:[\n` +
-        node.children.map((child) => genJSON(child, indent + "  ")).join("\n") +
-        `\n${indent}],`
+        `${indent}"${node.name}":[\n` +
+        node.children
+          .map((child) => genJSON(child, indent + "  "))
+          .join(",\n") +
+        `\n${indent}]`
       );
     } else if (node.type === "arrayitem") {
       return (
         `${indent}{\n` +
-        node.children.map((child) => genJSON(child, indent + "  ")).join("\n") +
-        `\n${indent}},`
+        node.children
+          .map((child) => genJSON(child, indent + "  "))
+          .join(",\n") +
+        `\n${indent}}`
       );
     } else if (node.type === "property") {
-      return `${indent}${node.name}:${node.value},`;
+      return `${indent}"${node.name}":${node.value}`;
     }
   }
 
-  return genJSON(parseAST(input.split("\n")));
+  let jsonString = genJSON(parseAST(input.split("\n")));
+
+  return JSON.parse(jsonString);
 }
