@@ -37,11 +37,11 @@ function App() {
     document.activeElement.blur();
   }
 
-  const openFiles = async (event) => {
+  const openSngFiles = async (event) => {
     const newSongs = await Promise.all(
       [...event.target.files].map(async (file) => {
         const data = await file.text();
-        return parseSng(data);
+        return parseSng(data, file.name.split(".").slice(0, -1).join("."));
       })
     );
 
@@ -62,19 +62,20 @@ function App() {
       event.target.files[0].name.split(".").slice(0, -1).join(".")
     );
 
-    const { items } = parseCol(scheduleFile);
+    const scheduleSongs = parseCol(scheduleFile).items.filter(
+      ({ FileName }) => FileName
+    );
 
     let newSongs = await Promise.all(
-      items.reduce((acc, { FileName }) => {
-        if (FileName) {
-          acc.push(zip.file(`Songs/${FileName}`).async("text"));
-        }
-
+      scheduleSongs.reduce((acc, { FileName }) => {
+        acc.push(zip.file(`Songs/${FileName}`).async("text"));
         return acc;
       }, [])
     );
 
-    setSongs(newSongs.map(parseSng));
+    setSongs(
+      newSongs.map((song, i) => parseSng(song, scheduleSongs[i].Caption))
+    );
 
     setFocus();
   };
@@ -109,7 +110,7 @@ function App() {
   return (
     <Layout>
       <Header title={scheduleName} />
-      <ControlPanel addSng={openFiles} addZip={openZip} />
+      <ControlPanel addSng={openSngFiles} addZip={openZip} />
       <SideBar
         songs={songs}
         reorderSongs={reorderSongs}
