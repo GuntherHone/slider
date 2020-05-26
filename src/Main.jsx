@@ -10,8 +10,30 @@ const Layout = styled.div`
   font-size: 2em;
 `;
 
-export default ({ song }) => (
+const Slide = ({ verseId, verse }) => (
+  <pre
+    style={{
+      fontFamily: "sans-serif",
+      textAlign: "center",
+      lineHeight: "1.75em",
+    }}
+  >
+    {verseId}
+    <br></br>
+    <br></br>
+    {verse[0]}
+  </pre>
+);
+
+export default ({ song, slideIndex }) => (
   <Layout>
-    {song ? song.Title : "Please add .sng files using the add button..."}
+    {song ? (
+      <Slide
+        verse={song.verses[song.VerseOrder[slideIndex]]}
+        verseId={song.VerseOrder[slideIndex]}
+      />
+    ) : (
+      "Please add .sng files using the add button..."
+    )}
   </Layout>
 );

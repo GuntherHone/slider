@@ -118,7 +118,7 @@ function App() {
         selectedSlide={selectedSlideIndex}
         doSelect={doSelect}
       />
-      <Main song={songs[selectedSongIndex]} />
+      <Main song={songs[selectedSongIndex]} slideIndex={selectedSlideIndex} />
       <Footer songs={songs} />
     </Layout>
   );
